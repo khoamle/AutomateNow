@@ -1,11 +1,15 @@
 import { type Locator, type Page } from '@playwright/test';
-import { expect} from '@playwright/test';
+import { expect,Dialog} from '@playwright/test';
 
 export class Automatenow  {
   page: Page
 
   readonly javaScriptDelaysButton: Locator;
   readonly formFieldsButton: Locator;
+  readonly popupsButton: Locator;
+  readonly confirmPopupButton: Locator;
+  readonly promptPopupButton: Locator;
+
   readonly startButton: Locator;
   readonly liftoffTextbox: Locator;
   readonly countdown: Locator;
@@ -17,13 +21,16 @@ export class Automatenow  {
   readonly dropDownSelector: Locator;
   readonly emailField: Locator;
   readonly messageBox: Locator;
-
+  readonly submitButton: Locator;
+  readonly alertPopup: Locator;
+  readonly confirmPopupText: Locator;
+  readonly promptResult: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.javaScriptDelaysButton = page.getByRole('link', { name: 'JavaScript Delays' });
     this.formFieldsButton = page.getByRole('link', { name: 'Form Fields' });
-
+    this.popupsButton = page.getByRole('link', { name: 'Popups' });
     this.startButton = page.getByRole('button', { name: 'Start' });
     this.liftoffTextbox = page.locator('#delay');
     this.nameTextField = page.getByTestId('name-input');
@@ -33,6 +40,12 @@ export class Automatenow  {
     this.dropDownSelector = page.getByTestId('automation')
     this.emailField = page.getByTestId('email');
     this.messageBox = page.getByTestId('message');
+    this.submitButton = page.getByTestId('submit-btn');
+    this.alertPopup = page.locator('#alert');
+    this.confirmPopupButton =page.getByRole('button', {name: 'Confirm Popup'})
+    this.confirmPopupText = page.locator('#confirmResult')
+    this.promptPopupButton =page.getByRole('button', {name: 'Prompt Popup'})
+    this.promptResult = page.locator('#promptResult')
   }
 
   async FillUserInfo(name: string, password: string){
@@ -48,8 +61,8 @@ export class Automatenow  {
     await this.emailField.fill(email)
   }
 
-  async FillMessage(email: string){
-    await this.emailField.fill(email)
+  async FillMessage(text: string){
+    await this.messageBox.fill(text)
   }
 
   async SelectSingleFavoriteDrink(choice: string, page: Page){
@@ -102,6 +115,18 @@ export class Automatenow  {
     const randomOption = options[randomIndex];
     await this.dropDownSelector.selectOption({ value: randomOption.toLowerCase() });
     const selectValue = await this.dropDownSelector.inputValue()
-    await expect(selectValue).toEqual(randomOption.toLowerCase())
+    expect(selectValue).toEqual(randomOption.toLowerCase())
+  }
+
+  async handleDialog(dialog: Dialog){
+    if (dialog.type() === 'alert') {
+      expect(dialog.message()).toContain('Hi there, pal!');
+      await dialog.accept();
+    } else if (dialog.type() === 'confirm') {
+      await dialog.accept()
+    } else if (dialog.type() === 'prompt'){
+      await dialog.accept('Joe Smith');
+      //await dialog.accept();
+    }
   }
 }

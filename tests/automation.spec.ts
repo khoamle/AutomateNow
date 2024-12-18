@@ -28,12 +28,39 @@ test('Form Fields', async ({ page }) => {
   await automateNow.formFieldsButton.click();
   await automateNow.FillUserInfo(fakeName, fakePassword);
   await automateNow.SelectSingleFavoriteDrink("Milk", page);
-  await expect(automateNow.checkboxes.filter({hasText: 'Milk'})).toBeChecked;
+  expect(automateNow.checkboxes.filter({hasText: 'Milk'})).toBeChecked;
   await automateNow.SelectAllFavoriteDrinks();
   await automateNow.SelectRandomFavoriteDrinks();
-  await automateNow.SelectRandomColor()
-  await automateNow.AutomationDropdownSelection('undecided', page)
-  await automateNow.AutomationDropdownRandomSelection()
-  await automateNow.FillEmail(fakeEmail)
+  await automateNow.SelectRandomColor();
+  await automateNow.AutomationDropdownSelection('undecided', page);
+  await automateNow.AutomationDropdownRandomSelection();
+  await automateNow.FillEmail(fakeEmail);
+  await automateNow.FillMessage(fakeMessage);
+  await automateNow.submitButton.click();
+  page.on('dialog', async dialog => {
+    expect(dialog.message()).toContain('Hello World')
+    await dialog.accept();
+  })
 }); 
+
+test('Popups', async({page})=> {
+  const automateNow = new Automatenow(page);
+  await automateNow.popupsButton.click();
+  // page.on('dialog', async dialog => {
+  //   if (dialog.type() === 'alert') {
+  //     expect(dialog.message()).toContain('Hi there, pal!');
+  //     await dialog.accept();
+  //   } else if (dialog.type() === 'confirm') {
+  //     await dialog.accept()
+  //   }
+  // });
+  page.on('dialog', async dialog => {
+    await automateNow.handleDialog(dialog)
+  })
+  await automateNow.alertPopup.click();
+  await automateNow.confirmPopupButton.click();
+  await expect(automateNow.confirmPopupText).toContainText("OK it is!");
+  await automateNow.promptPopupButton.click();
+  await expect(automateNow.promptResult).toContainText(`Nice to meet you, J`) 
+});
 
