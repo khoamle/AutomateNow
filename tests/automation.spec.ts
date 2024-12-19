@@ -30,30 +30,18 @@ test('Form Fields', async ({ page }) => {
   await automateNow.SelectSingleFavoriteDrink("Milk", page);
   expect(automateNow.checkboxes.filter({hasText: 'Milk'})).toBeChecked;
   await automateNow.SelectAllFavoriteDrinks();
-  await automateNow.SelectRandomFavoriteDrinks();
-  await automateNow.SelectRandomColor();
+  await automateNow.RandomCheckFunction(automateNow.checkboxes)
+  await automateNow.RandomCheckFunction(automateNow.radios)
   await automateNow.AutomationDropdownSelection('undecided', page);
   await automateNow.AutomationDropdownRandomSelection();
-  await automateNow.FillEmail(fakeEmail);
-  await automateNow.FillMessage(fakeMessage);
+  await automateNow.emailField.fill(fakeEmail)
+  await automateNow.messageBox.fill(fakeMessage)
   await automateNow.submitButton.click();
-  page.on('dialog', async dialog => {
-    expect(dialog.message()).toContain('Hello World')
-    await dialog.accept();
-  })
 }); 
 
 test('Popups', async({page})=> {
   const automateNow = new Automatenow(page);
   await automateNow.popupsButton.click();
-  // page.on('dialog', async dialog => {
-  //   if (dialog.type() === 'alert') {
-  //     expect(dialog.message()).toContain('Hi there, pal!');
-  //     await dialog.accept();
-  //   } else if (dialog.type() === 'confirm') {
-  //     await dialog.accept()
-  //   }
-  // });
   page.on('dialog', async dialog => {
     await automateNow.handleDialog(dialog)
   })
@@ -61,6 +49,11 @@ test('Popups', async({page})=> {
   await automateNow.confirmPopupButton.click();
   await expect(automateNow.confirmPopupText).toContainText("OK it is!");
   await automateNow.promptPopupButton.click();
-  await expect(automateNow.promptResult).toContainText(`Nice to meet you, J`) 
+  await expect(automateNow.promptResult).toContainText("Nice to meet you, Joe Smith!")
+  await automateNow.toolTip.hover();
+  await automateNow.toolTip.click();
+  await expect(automateNow.toolTipText).toBeVisible();
+  await expect(automateNow.toolTipText).toHaveText('Cool text')
+
 });
 

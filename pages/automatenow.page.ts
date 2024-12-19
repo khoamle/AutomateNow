@@ -9,6 +9,8 @@ export class Automatenow  {
   readonly popupsButton: Locator;
   readonly confirmPopupButton: Locator;
   readonly promptPopupButton: Locator;
+  readonly toolTip: Locator;
+  readonly toolTipText: Locator;
 
   readonly startButton: Locator;
   readonly liftoffTextbox: Locator;
@@ -46,6 +48,8 @@ export class Automatenow  {
     this.confirmPopupText = page.locator('#confirmResult')
     this.promptPopupButton =page.getByRole('button', {name: 'Prompt Popup'})
     this.promptResult = page.locator('#promptResult')
+    this.toolTip = page.locator('.tooltip_1')
+    this.toolTipText = page.locator("#myTooltip")
   }
 
   async FillUserInfo(name: string, password: string){
@@ -55,14 +59,6 @@ export class Automatenow  {
     await this.passwordTextField.click();
     await this.passwordTextField.clear();
     await this.passwordTextField.fill(password);
-  }
-
-  async FillEmail(email: string){
-    await this.emailField.fill(email)
-  }
-
-  async FillMessage(text: string){
-    await this.messageBox.fill(text)
   }
 
   async SelectSingleFavoriteDrink(choice: string, page: Page){
@@ -87,7 +83,7 @@ export class Automatenow  {
     const selectorCount = await selector.count()
     if(selectorCount > 0){
       const randomIndex = Math.floor(Math.random() * selectorCount);
-      const randomSelector = await selector.nth(randomIndex);
+      const randomSelector = selector.nth(randomIndex);
       const isChecked = await randomSelector.isChecked();
       if (isChecked) {
         await randomSelector.uncheck();
@@ -95,14 +91,6 @@ export class Automatenow  {
         await randomSelector.check();
       }
     }
-  }
-
-  async SelectRandomFavoriteDrinks(){
-    await this.RandomCheckFunction(this.checkboxes)
-  }
-
-  async SelectRandomColor(){
-    await this.RandomCheckFunction(this.radios)
   }
   
   async AutomationDropdownSelection(choice: string, page: Page){
@@ -126,7 +114,6 @@ export class Automatenow  {
       await dialog.accept()
     } else if (dialog.type() === 'prompt'){
       await dialog.accept('Joe Smith');
-      //await dialog.accept();
     }
   }
 }
