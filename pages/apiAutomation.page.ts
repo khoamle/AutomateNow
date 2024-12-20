@@ -20,4 +20,18 @@ export class ApiAutomation {
     const apiResponse = await this.request.post(`${this.baseURL}/${endpoint}`);
     return apiResponse;
   }
+
+  async postMethodWithBody(endpoint: string) {
+    const requestBody= {
+      "search_product": 'top',
+    }
+    const apiResponse = await this.request.post(`${this.baseURL}/${endpoint}`, {
+      data: {
+        search_product: 'top',
+      }
+    });
+    console.log(apiResponse);
+    const responseBody = await apiResponse.json();
+    console.log(responseBody);
+  }
 }

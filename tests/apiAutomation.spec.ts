@@ -28,3 +28,20 @@ test('Get all brands list API response test', async({request}: { request: APIReq
   const responseBody = await apiResponse.json();
   expect(responseBody.responseCode).toBe(200);
 })
+
+
+test('Post to all search list API response test', async({request}: { request: APIRequestContext}) => {
+  const response = await request.post(`${baseURL}/searchProduct`, {
+    data: {
+      search_product: 'hat'
+    },
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  expect(response.status()).toBe(200);
+  console.log(response)
+  const responseBody = await response.json();
+  console.log(responseBody);
+})
+
