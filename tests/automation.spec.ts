@@ -7,8 +7,10 @@ const fakePassword = faker.internet.password({length: 20});
 const fakeEmail = faker.internet.email({firstName: 'JohnDoe'})
 const fakeMessage = faker.lorem.sentences()
 
+
+
 test.beforeEach(async({page})=>{
-    await page.goto('/');
+    await page.goto('https://practice-automation.com/');
 });
 
 test('has title', async({page})=>{
@@ -54,6 +56,15 @@ test('Popups', async({page})=> {
   await automateNow.toolTip.click();
   await expect(automateNow.toolTipText).toBeVisible();
   await expect(automateNow.toolTipText).toHaveText('Cool text')
+});
 
+test('Slider form', async({page})=>{
+  const automateNow = new Automatenow(page);
+  await automateNow.sliderButton.click()
+  expect(await automateNow.slider.inputValue()).toBe('25')
+  await automateNow.slider.fill('50');
+  expect(await automateNow.slider.inputValue()).toBe('50')
+  await automateNow.slider.fill('60');
+  expect(await automateNow.slider.inputValue()).toBe('60')
 });
 

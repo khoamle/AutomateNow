@@ -9,8 +9,8 @@ export class Automatenow  {
   readonly popupsButton: Locator;
   readonly confirmPopupButton: Locator;
   readonly promptPopupButton: Locator;
-  readonly toolTip: Locator;
-  readonly toolTipText: Locator;
+  readonly sliderButton: Locator;
+  readonly calenderButton: Locator;
 
   readonly startButton: Locator;
   readonly liftoffTextbox: Locator;
@@ -27,6 +27,9 @@ export class Automatenow  {
   readonly alertPopup: Locator;
   readonly confirmPopupText: Locator;
   readonly promptResult: Locator;
+  readonly toolTip: Locator;
+  readonly toolTipText: Locator;
+  readonly slider: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -34,6 +37,8 @@ export class Automatenow  {
     this.formFieldsButton = page.getByRole('link', { name: 'Form Fields' });
     this.popupsButton = page.getByRole('link', { name: 'Popups' });
     this.startButton = page.getByRole('button', { name: 'Start' });
+    this.sliderButton = page.getByRole('link', { name: 'Sliders' });
+
     this.liftoffTextbox = page.locator('#delay');
     this.nameTextField = page.getByTestId('name-input');
     this.passwordTextField = page.getByLabel('Password');
@@ -44,12 +49,13 @@ export class Automatenow  {
     this.messageBox = page.getByTestId('message');
     this.submitButton = page.getByTestId('submit-btn');
     this.alertPopup = page.locator('#alert');
-    this.confirmPopupButton =page.getByRole('button', {name: 'Confirm Popup'})
-    this.confirmPopupText = page.locator('#confirmResult')
-    this.promptPopupButton =page.getByRole('button', {name: 'Prompt Popup'})
-    this.promptResult = page.locator('#promptResult')
-    this.toolTip = page.locator('.tooltip_1')
-    this.toolTipText = page.locator("#myTooltip")
+    this.confirmPopupButton =page.getByRole('button', {name: 'Confirm Popup'});
+    this.confirmPopupText = page.locator('#confirmResult');
+    this.promptPopupButton =page.getByRole('button', {name: 'Prompt Popup'});
+    this.promptResult = page.locator('#promptResult');
+    this.toolTip = page.locator('.tooltip_1');
+    this.toolTipText = page.locator("#myTooltip");
+    this.slider = page.locator('input[type="range"]');
   }
 
   async FillUserInfo(name: string, password: string){
