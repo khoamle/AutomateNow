@@ -15,7 +15,7 @@ test('Get specific bookingid API response test', async({request}: {request: APIR
   const apiResponse = await apiAutomation2.getMethod('1')
   expect(apiResponse.status()).toBe(200);
   const responseBody = await apiResponse.json();
-  expect(responseBody.additionalneeds).toEqual('Breakfast')
+  expect(responseBody.firstname).toEqual('Susan')
 })
 
 test('Create a new booking API response test', async({request}: {request: APIRequestContext}) => {
