@@ -1,11 +1,24 @@
 {
-    "booking": {
-      "firstname": "Kevin",
-      "lastname": "Bacon",
-      "totalprice": 999,
-      "depositpaid": true,
-      "checkin": "2018-01-01",
-      "checkout": "2019-01-01",
-      "additionalneeds": "Breakfast"
-    }
+  "booking": {
+    "firstname": "Kevin",
+    "lastname": "Bacon",
+    "totalprice": 999,
+    "depositpaid": true,
+    "checkin": "2018-01-01",
+    "checkout": "2019-01-01",
+    "additionalneeds": "Breakfast"
+  },
+
+  "standardUser": {
+    "username": "standard_user",
+    "password": "secret_sauce"
+  },
+  "lockedOutUser": {
+    "username": "locked_out_user",
+    "password": "secret_sauce"
+  },
+  "problemUser": {
+    "username": "problem_user",
+    "password": "secret_sauce"
   }
+}
