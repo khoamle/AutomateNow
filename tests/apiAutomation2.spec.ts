@@ -1,49 +1,71 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
 import { ApiAutomation2 } from '../pages/apiAutomation2.page';
+import testData from '../testData/testData.json'
 
-const baseURL = 'https://restful-booker.herokuapp.com/booking'
+const baseURL = 'https://restful-booker.herokuapp.com'
 
+test.describe('Booking API Tests', () => {
+  let apiAutomation2: ApiAutomation2;
+  let requestBody;
+  let bookingid: number;
+  let authToken: string;
 
-test('Get all booking API response test', async({request}: {request: APIRequestContext}) => {
-  const apiAutomation2 = new ApiAutomation2(request, baseURL);
-  const apiResponse = await apiAutomation2.getMethod('')
-  expect(apiResponse.status()).toBe(200);
-})
+  test.beforeAll(async () => {
+    apiAutomation2 = new ApiAutomation2(baseURL);
+    requestBody = {
+      "firstname" : testData.booking.firstname,
+      "lastname" : testData.booking.lastname,
+      "totalprice" : testData.booking.totalprice,
+      "depositpaid" : testData.booking.depositpaid,
+      "bookingdates" : {
+          "checkin" : testData.booking.checkin,
+          "checkout" : testData.booking.checkout
+      },
+      "additionalneeds" : testData.booking.additionalneeds
+    }
+  
+  });
 
-test('Get specific bookingid API response test', async({request}: {request: APIRequestContext}) => {
-  const apiAutomation2 = new ApiAutomation2(request, baseURL);
-  const apiResponse = await apiAutomation2.getMethod('1')
-  expect(apiResponse.status()).toBe(200);
-  const responseBody = await apiResponse.json();
-  expect(responseBody).toHaveProperty('firstname');
-  expect(responseBody).toHaveProperty('lastname');
-  expect(responseBody).toHaveProperty('totalprice');
-  expect(responseBody).toHaveProperty('depositpaid');
-})
+  test('Create authorization token API response test', async({request} : {request: APIRequestContext}) => {
+    const apiResponse = await apiAutomation2.createAuthMethod(request, 'auth')
+    expect(apiResponse.status()).toBe(200);
+  })
 
-test('Create a new booking API response test', async({request}: {request: APIRequestContext}) => {
-  const dataInput = ['Kevin', 'Bacon', 999, true, "2018-01-01", "2019-01-01", "Breakfast"];
-  const requestBody = {
-    "firstname" : dataInput[0],
-    "lastname" : dataInput[1],
-    "totalprice" : dataInput[2],
-    "depositpaid" : dataInput[3],
-    "bookingdates" : {
-        "checkin" : dataInput[4],
-        "checkout" : dataInput[5]
-    },
-    "additionalneeds" : dataInput[6]
-  }
-  const apiAutomation2 = new ApiAutomation2(request, baseURL);
-  const apiResponse = await apiAutomation2.postMethodWithBody(requestBody, '')
-  expect(apiResponse.status()).toBe(200);
-  const responseBody = await apiResponse.json();
-  expect(responseBody).toHaveProperty('bookingid');
-  expect(responseBody.booking.firstname).toBe(requestBody.firstname)
-  expect(responseBody.booking.lastname).toBe(requestBody.lastname)
-  expect(responseBody.booking.totalprice).toBe(requestBody.totalprice)
-  expect(responseBody.booking.depositpaid).toBe(requestBody.depositpaid)
-  expect(responseBody.booking.bookingdates.checkin).toBe(requestBody.bookingdates.checkin)
-  expect(responseBody.booking.bookingdates.checkout).toBe(requestBody.bookingdates.checkout)
-  expect(responseBody.booking.additionalneeds).toBe(requestBody.additionalneeds)
-})
+  test('Get all booking API response test', async({request} : {request: APIRequestContext}) => {
+    const apiResponse = await apiAutomation2.getMethod(request, "booking")
+    expect(apiResponse.status()).toBe(200);
+  })
+  
+  test('Get specific bookingid API response test', async({request}: {request: APIRequestContext}) => {
+    const apiResponse = await apiAutomation2.getMethod(request, 'booking/1')
+    expect(apiResponse.status()).toBe(200);
+    const responseBody = await apiResponse.json();
+    expect(responseBody).toHaveProperty('firstname');
+    expect(responseBody).toHaveProperty('lastname');
+    expect(responseBody).toHaveProperty('totalprice');
+    expect(responseBody).toHaveProperty('depositpaid');
+  })
+  
+  test('Create a new booking API response test', async({request}: {request: APIRequestContext}) => {
+    const apiResponse = await apiAutomation2.postMethodWithBody(request,'booking', requestBody)
+    expect(apiResponse.status()).toBe(200);
+    const responseBody = await apiResponse.json();
+    expect(responseBody).toHaveProperty('bookingid');
+    expect(responseBody.booking.firstname).toBe(requestBody.firstname)
+    expect(responseBody.booking.lastname).toBe(requestBody.lastname)
+    expect(responseBody.booking.totalprice).toBe(requestBody.totalprice)
+    expect(responseBody.booking.depositpaid).toBe(requestBody.depositpaid)
+    expect(responseBody.booking.bookingdates.checkin).toBe(requestBody.bookingdates.checkin)
+    expect(responseBody.booking.bookingdates.checkout).toBe(requestBody.bookingdates.checkout)
+    expect(responseBody.booking.additionalneeds).toBe(requestBody.additionalneeds)
+  })
+
+  test.skip('Delete booking API response test', async({request}: {request: APIRequestContext}) => {
+    if (!bookingid){
+      throw new Error('Booking ID is not defined');
+    }
+    const apiResponse = await apiAutomation2.deleteMethod(request, 'booking', bookingid)
+    expect(apiResponse.status()).toBe(201);
+
+  })
+});
