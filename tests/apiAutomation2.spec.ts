@@ -8,7 +8,6 @@ test.describe('Booking API Tests', () => {
   let apiAutomation2: ApiAutomation2;
   let requestBody;
   let bookingid: number;
-  let authToken: string;
 
   test.beforeAll(async () => {
     apiAutomation2 = new ApiAutomation2(baseURL);
@@ -50,6 +49,7 @@ test.describe('Booking API Tests', () => {
     const apiResponse = await apiAutomation2.postMethodWithBody(request,'booking', requestBody)
     expect(apiResponse.status()).toBe(200);
     const responseBody = await apiResponse.json();
+    bookingid = responseBody.bookingid;
     expect(responseBody).toHaveProperty('bookingid');
     expect(responseBody.booking.firstname).toBe(requestBody.firstname)
     expect(responseBody.booking.lastname).toBe(requestBody.lastname)
