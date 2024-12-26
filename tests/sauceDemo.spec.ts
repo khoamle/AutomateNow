@@ -1,10 +1,8 @@
 import { test, expect, Page } from '@playwright/test';
 import { LoginPage } from '../pages/login.page';
-import testData from '../testData/testData.json'
-import { log } from 'console';
 
-const username = testData.standardUser.username
-const password = testData.standardUser.password
+const username = process.env.STANDARD_USER as string
+const password = process.env.PASSWORD as string
 
 
 test('Login',async ({ page }) => {
