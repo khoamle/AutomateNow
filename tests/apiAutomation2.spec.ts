@@ -1,6 +1,7 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
 import { ApiAutomation2 } from '../pages/apiAutomation2.page';
 import testData from '../testData/testData.json'
+import { faker } from '@faker-js/faker';
 
 const baseURL = 'https://restful-booker.herokuapp.com'
 
@@ -8,6 +9,7 @@ test.describe('Booking API Tests', () => {
   let apiAutomation2: ApiAutomation2;
   let requestBody;
   let bookingid: number;
+  bookingid = faker.number.int({min: 1, max: 10})
 
   test.beforeAll(async () => {
     apiAutomation2 = new ApiAutomation2(baseURL);
@@ -36,7 +38,7 @@ test.describe('Booking API Tests', () => {
   })
   
   test('Get specific bookingid API response test', async({request}: {request: APIRequestContext}) => {
-    const apiResponse = await apiAutomation2.getMethod(request, 'booking/1')
+    const apiResponse = await apiAutomation2.getMethod(request, `booking/${bookingid}`)
     expect(apiResponse.status()).toBe(200);
     const responseBody = await apiResponse.json();
     expect(responseBody).toHaveProperty('firstname');
@@ -60,12 +62,14 @@ test.describe('Booking API Tests', () => {
     expect(responseBody.booking.additionalneeds).toBe(requestBody.additionalneeds)
   })
 
-  test.skip('Delete booking API response test', async({request}: {request: APIRequestContext}) => {
+  test.afterAll(async ({request}: {request: APIRequestContext}) => {
     if (!bookingid){
       throw new Error('Booking ID is not defined');
     }
-    const apiResponse = await apiAutomation2.deleteMethod(request, 'booking', bookingid)
+    const apiResponse = await apiAutomation2.deleteMethod(request, `booking/${bookingid}`);
     expect(apiResponse.status()).toBe(201);
-
+    
+    const getAPIResponse = await apiAutomation2.getMethod(request, `booking/${bookingid}`);
+    expect(getAPIResponse.status()).toBe(404);
   })
 });

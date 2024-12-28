@@ -3,14 +3,14 @@ import { APIRequestContext } from '@playwright/test';
 export class ApiAutomation2 {
   private baseURL: string;
   private headers: Record<string,string>;
-  private authorization: string;
 
   constructor(baseURL: string) {
     this.baseURL = baseURL;
     this.headers = {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': "Basic YWRtaW46cGFzc3dvcmQxMjM=" 
     };
-    this.authorization = this.authorization;
   }
 
   // Get method
@@ -46,13 +46,11 @@ export class ApiAutomation2 {
     return apiResponse;
   }
 
-  async deleteMethod(request: APIRequestContext, endpoint: string, bookingid: number) {
+  async deleteMethod(request: APIRequestContext, endpoint: string) {
     const options: any = {
-      headers: this.headers,
-      authorization: "Basic YWRtaW46cGFzc3dvcmQxMjM="
+      headers: this.headers
     };
-    const apiResponse = await request.delete(`${this.baseURL}/${endpoint}/${bookingid}`, options);
-    console.log(`Booking ID: ${bookingid}`);
+    const apiResponse = await request.delete(`${this.baseURL}/${endpoint}`, options);
     return apiResponse;
   }
 }
