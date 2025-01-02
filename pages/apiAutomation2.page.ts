@@ -33,6 +33,14 @@ export class ApiAutomation2 {
     return apiResponse;
   }
 
+  async putMethod(request: APIRequestContext, endpoint: string, requestBody: any) {
+    const apiResponse = await request.put(`${this.baseURL}/${endpoint}`, {
+      headers: this.headers,
+      data: requestBody
+    });
+    return apiResponse;
+  }
+
   async createAuthMethod(request: APIRequestContext, endpoint: string) {
     const credentials = {
       username: "admin",

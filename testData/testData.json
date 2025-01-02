@@ -1,11 +1,22 @@
 {
-  "booking": {
-    "firstname": "Kevin",
-    "lastname": "Bacon",
-    "totalprice": 999,
-    "depositpaid": true,
-    "checkin": "2018-01-01",
-    "checkout": "2019-01-01",
-    "additionalneeds": "Breakfast"
-  }
+  "bookings": [
+    {
+      "firstname": "Kevin",
+      "lastname": "Bacon",
+      "totalprice": 999,
+      "depositpaid": true,
+      "checkin": "2018-01-01",
+      "checkout": "2019-01-01",
+      "additionalneeds": "Breakfast"
+    },
+    {
+      "firstname": "Emma",
+      "lastname": "Stone",
+      "totalprice": 1200,
+      "depositpaid": false,
+      "checkin": "2020-05-15",
+      "checkout": "2020-06-15",
+      "additionalneeds": "Wi-Fi"
+    }
+  ]
 }

@@ -8,21 +8,33 @@ const baseURL = 'https://restful-booker.herokuapp.com'
 test.describe('Booking API Tests', () => {
   let apiAutomation2: ApiAutomation2;
   let requestBody: any;
+  let requestBody2: any;
   let bookingid: number;
   bookingid = faker.number.int({min: 1, max: 10})
 
   test.beforeAll(async () => {
     apiAutomation2 = new ApiAutomation2(baseURL);
     requestBody = {
-      "firstname" : testData.booking.firstname,
-      "lastname" : testData.booking.lastname,
-      "totalprice" : testData.booking.totalprice,
-      "depositpaid" : testData.booking.depositpaid,
+      "firstname" : testData.bookings[0].firstname,
+      "lastname" : testData.bookings[0].lastname,
+      "totalprice" : testData.bookings[0].totalprice,
+      "depositpaid" : testData.bookings[0].depositpaid,
       "bookingdates" : {
-          "checkin" : testData.booking.checkin,
-          "checkout" : testData.booking.checkout
+          "checkin" : testData.bookings[0].checkin,
+          "checkout" : testData.bookings[0].checkout
       },
-      "additionalneeds" : testData.booking.additionalneeds
+      "additionalneeds" : testData.bookings[1].additionalneeds
+    }
+    requestBody2 = {
+      "firstname" : testData.bookings[1].firstname,
+      "lastname" : testData.bookings[1].lastname,
+      "totalprice" : testData.bookings[1].totalprice,
+      "depositpaid" : testData.bookings[1].depositpaid,
+      "bookingdates" : {
+          "checkin" : testData.bookings[1].checkin,
+          "checkout" : testData.bookings[1].checkout
+      },
+      "additionalneeds" : testData.bookings[1].additionalneeds
     }
   
   });
@@ -64,6 +76,19 @@ test.describe('Booking API Tests', () => {
     expect(responseBody.booking.bookingdates.checkin).toBe(requestBody.bookingdates.checkin)
     expect(responseBody.booking.bookingdates.checkout).toBe(requestBody.bookingdates.checkout)
     expect(responseBody.booking.additionalneeds).toBe(requestBody.additionalneeds)
+  })
+
+  test('Update a booking API response test', async({request}: {request: APIRequestContext}) => {
+    const apiResponse = await apiAutomation2.putMethod(request, `booking/${bookingid}`, requestBody2)
+    expect(apiResponse.status()).toBe(200);
+    const responseBody = await apiResponse.json();
+    expect(responseBody.firstname).toBe(requestBody2.firstname)
+    expect(responseBody.lastname).toBe(requestBody2.lastname)
+    expect(responseBody.totalprice).toBe(requestBody2.totalprice)
+    expect(responseBody.depositpaid).toBe(requestBody2.depositpaid)
+    expect(responseBody.bookingdates.checkin).toBe(requestBody2.bookingdates.checkin)
+    expect(responseBody.bookingdates.checkout).toBe(requestBody2.bookingdates.checkout)
+    expect(responseBody.additionalneeds).toBe(requestBody2.additionalneeds)
   })
 
   test.afterAll(async ({request}: {request: APIRequestContext}) => {
