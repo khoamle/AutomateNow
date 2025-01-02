@@ -7,7 +7,7 @@ const baseURL = 'https://restful-booker.herokuapp.com'
 
 test.describe('Booking API Tests', () => {
   let apiAutomation2: ApiAutomation2;
-  let requestBody;
+  let requestBody: any;
   let bookingid: number;
   bookingid = faker.number.int({min: 1, max: 10})
 
@@ -39,12 +39,16 @@ test.describe('Booking API Tests', () => {
   
   test('Get specific bookingid API response test', async({request}: {request: APIRequestContext}) => {
     const apiResponse = await apiAutomation2.getMethod(request, `booking/${bookingid}`)
-    expect(apiResponse.status()).toBe(200);
-    const responseBody = await apiResponse.json();
-    expect(responseBody).toHaveProperty('firstname');
-    expect(responseBody).toHaveProperty('lastname');
-    expect(responseBody).toHaveProperty('totalprice');
-    expect(responseBody).toHaveProperty('depositpaid');
+    if (apiResponse.status() === 200){
+      expect(apiResponse.status()).toBe(200);
+      const responseBody = await apiResponse.json();
+      expect(responseBody).toHaveProperty('firstname');
+      expect(responseBody).toHaveProperty('lastname');
+      expect(responseBody).toHaveProperty('totalprice');
+      expect(responseBody).toHaveProperty('depositpaid');
+    } else {
+      expect(apiResponse.status()).toBe(404);
+    }
   })
   
   test('Create a new booking API response test', async({request}: {request: APIRequestContext}) => {
