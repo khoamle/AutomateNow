@@ -30,6 +30,9 @@ export class Automatenow  {
   readonly toolTip: Locator;
   readonly toolTipText: Locator;
   readonly slider: Locator;
+  readonly openCalendar: Locator;
+  readonly submitCalenderButton: Locator;
+  readonly calendarDate: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -38,6 +41,7 @@ export class Automatenow  {
     this.popupsButton = page.getByRole('link', { name: 'Popups' });
     this.startButton = page.getByRole('button', { name: 'Start' });
     this.sliderButton = page.getByRole('link', { name: 'Sliders' });
+    this.calenderButton = page.getByRole('link', { name: 'Calendars' });
 
     this.liftoffTextbox = page.locator('#delay');
     this.nameTextField = page.getByTestId('name-input');
@@ -56,6 +60,10 @@ export class Automatenow  {
     this.toolTip = page.locator('.tooltip_1');
     this.toolTipText = page.locator("#myTooltip");
     this.slider = page.locator('input[type="range"]');
+
+    this.openCalendar = page.getByLabel('Select or enter a date (YYYY-');
+    this.submitCalenderButton = page.getByRole('button', { name: 'Submit' });
+    this.calendarDate = page.locator(".field-value");
   }
 
   async FillUserInfo(name: string, password: string){
@@ -103,6 +111,7 @@ export class Automatenow  {
     const dropDownSelector = 'select#automation';
     await page.selectOption(dropDownSelector, { value: choice})
   }
+
   async AutomationDropdownRandomSelection(){
     const options = await this.dropDownSelector.locator('option').allTextContents();
     const randomIndex = Math.floor(Math.random() * options.length);
@@ -122,4 +131,12 @@ export class Automatenow  {
       await dialog.accept('Joe Smith');
     }
   }
+
+  async handleCalendar(){
+    const randomDay = Math.floor(Math.random()* 31) + 1;
+    await this.page.locator(`a[data-date="${randomDay}"]`).click();
+    await this.submitCalenderButton.click();
+    await this.calendarDate.textContent();
+  }
+
 }

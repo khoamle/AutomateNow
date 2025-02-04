@@ -68,3 +68,10 @@ test('Slider form', async({page})=>{
   expect(await automateNow.slider.inputValue()).toBe('60')
 });
 
+test('Calendar', async({page})=>{
+  const automateNow = new Automatenow(page);
+  await automateNow.calenderButton.click()
+  await automateNow.openCalendar.click()
+  await automateNow.handleCalendar();
+});
+
