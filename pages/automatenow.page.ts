@@ -133,7 +133,7 @@ export class Automatenow  {
   }
 
   async handleCalendar(){
-    const randomDay = Math.floor(Math.random()* 31) + 1;
+    const randomDay = Math.floor(Math.random()* 25) + 1;
     await this.page.locator(`a[data-date="${randomDay}"]`).click();
     await this.submitCalenderButton.click();
   }
